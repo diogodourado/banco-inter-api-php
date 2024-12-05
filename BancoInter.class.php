@@ -186,4 +186,15 @@ class BancoInter
 
         return $result['pdf'];
     }
+
+    function cobrancaCancel(string $codigoSolicitacao, string $motive)
+    {
+
+        $result = $this->request('POST', 'cobranca/v3/cobrancas/' . $codigoSolicitacao . '/cancelar', ['motivoCancelamento' => $motive]);
+
+        if (is_array($result))
+            throw new Exception("Erro ao recuperar cobrança: " . json_encode($result));
+
+        return true;
+    }
 }
