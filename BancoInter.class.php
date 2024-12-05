@@ -126,4 +126,15 @@ class BancoInter
 
         return true;
     }
+
+
+    function webhookCallbacks($params)
+    {
+        $result = $this->request('GET', 'cobranca/v3/cobrancas/webhook/callbacks', $params);
+
+        if (!isset($result['totalElementos']))
+            throw new Exception("Erro ao recuperar webhook cadastrado: " . json_encode($result));
+
+        return $result;
+    }
 }
