@@ -165,4 +165,15 @@ class BancoInter
 
         return $result['codigoSolicitacao'];
     }
+
+    function cobrancaGet(string $codigoSolicitacao)
+    {
+
+        $result = $this->request('GET', 'cobranca/v3/cobrancas/' . $codigoSolicitacao);
+
+        if (!isset($result['cobranca']))
+            throw new Exception("Erro ao recuperar cobrança: " . json_encode($result));
+
+        return $result;
+    }
 }
