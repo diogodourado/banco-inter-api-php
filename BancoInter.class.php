@@ -96,4 +96,34 @@ class BancoInter
 
         return $response;
     }
+
+    function webhookGet()
+    {
+        $result = $this->request('GET', 'cobranca/v3/cobrancas/webhook');
+
+        if ($result !== NULL && !isset($result['webhookUrl']))
+            throw new Exception("Erro ao recuperar webhook cadastrado: " . json_encode($result));
+
+        return $result;
+    }
+
+    function webhookSet($url)
+    {
+        $result = $this->request('PUT', 'cobranca/v3/cobrancas/webhook', ['webhookUrl' => $url]);
+
+        if (is_array($result))
+            throw new Exception("Erro ao cadastrar webhook: " . json_encode($result));
+
+        return true;
+    }
+
+    function webhookDelete()
+    {
+        $result = $this->request('DELETE', 'cobranca/v3/cobrancas/webhook');
+
+        if (is_array($result))
+            throw new Exception("Erro ao deletar webhook: " . json_encode($result));
+
+        return true;
+    }
 }
