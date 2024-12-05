@@ -176,4 +176,14 @@ class BancoInter
 
         return $result;
     }
+
+    function cobrancaGetPdf(string $codigoSolicitacao)
+    {
+        $result = $this->request('GET', 'cobranca/v3/cobrancas/' . $codigoSolicitacao . '/pdf');
+
+        if (!isset($result['pdf']))
+            throw new Exception("Erro ao recuperar cobrança: " . json_encode($result));
+
+        return $result['pdf'];
+    }
 }
