@@ -197,4 +197,15 @@ class BancoInter
 
         return true;
     }
+
+    function cobrancaList(array $params = [])
+    {
+
+        $result = $this->request('GET', 'cobranca/v3/cobrancas', $params);
+
+        if (!isset($result['cobrancas']))
+            throw new Exception("Erro ao listar cobranças: " . json_encode($result));
+
+        return $result;
+    }
 }
