@@ -23,6 +23,29 @@ class BancoInter
         $this->scope = 'boleto-cobranca.read boleto-cobranca.write';
     }
 
+    function getBearerToken()
+    {
+        if (!file_exists($this->tokenPath) || file_exists($this->tokenPath) && (time() - filemtime($this->tokenPath) > 3000))
+            return $this->generateBearerToken();
+
+        return file_get_contents($this->tokenPath);
+    }
+
+    function generateBearerToken()
+    {
+
+        $response = $this->request('POST', 'oauth/v2/token', [
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret,
+            'scope' => $this->scope,
+            'grant_type' => 'client_credentials',
+        ], true);
+
+        file_put_contents($this->tokenPath, $response['access_token']);
+
+        return $response['access_token'];
+    }
+
     function request(string $method, string $endpoint, array $data = [], bool $noAuth = false)
     {
         if ($noAuth === false)
