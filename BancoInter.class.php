@@ -127,7 +127,6 @@ class BancoInter
         return true;
     }
 
-
     function webhookCallbacks($params)
     {
         $result = $this->request('GET', 'cobranca/v3/cobrancas/webhook/callbacks', $params);
@@ -136,5 +135,34 @@ class BancoInter
             throw new Exception("Erro ao recuperar webhook cadastrado: " . json_encode($result));
 
         return $result;
+    }
+
+    function cobrancaSet(array $params)
+    {
+        $params['mensagem'] = [
+            "linha1" => "",
+            "linha2" => "",
+            "linha3" => "",
+            "linha4" => "",
+            "linha5" => ""
+        ];
+
+        $params['beneficiarioFinal'] = [
+            "cpfCnpj" => $this->cpfCnpj,
+            "tipoPessoa" => "JURIDICA",
+            "nome" => "Nome do beneficiário",
+            "endereco" => "Avenida Brasil, 1200",
+            "bairro" => "Centro",
+            "cidade" => "Belo Horizonte",
+            "uf" => "MG",
+            "cep" => "30110000"
+        ];
+
+        $result = $this->request('POST', 'cobranca/v3/cobrancas', $params);
+
+        if (!isset($result['codigoSolicitacao']))
+            throw new Exception("Erro ao gerar cobrança: " . json_encode($result));
+
+        return $result['codigoSolicitacao'];
     }
 }
